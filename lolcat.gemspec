@@ -8,8 +8,8 @@ Gem::Specification.new do |s|
   s.authors     = ["Moe"]
   s.email       = ["moe@busyloop.net"]
   s.homepage    = "https://github.com/busyloop/lolcat"
-  s.summary     = %q{Rainbows and unicorns!}
-  s.description = %q{Okay, no unicorns. But rainbows!!}
+  s.description = %q{Rainbows and unicorns!}
+  s.summary     = %q{Okay, no unicorns. But rainbows!!}
 
   #s.rubyforge_project = "lolcat"
   s.add_dependency "paint", "~> 0.8.3"

@@ -40,7 +40,7 @@ module Lol
         Lol.whut "  fortune | lolcat  Display a rainbow cookie.", 14
     
         puts
-        Lol.whut "Report lolcat bugs to <http://www.github.org/busyloop/lolcat/>", 13
+        Lol.whut "Report lolcat bugs to <http://www.github.org/busyloop/lolcat/issues>", 13
         Lol.whut "lolcat home page: <http://www.github.org/busyloop/lolcat/>", 12
         Lol.whut "Report lolcat translation bugs to <http://speaklolcat.com/>", 11
         Lol.whut "For complete documentation, read the source!", 10
