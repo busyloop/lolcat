@@ -4,7 +4,7 @@
 
 ## Screenshot
 
-![](https://github.com/busyloop/lolcat/raw/master/lolcat/ass/screenshot.png)
+![](https://github.com/busyloop/lolcat/raw/master/ass/screenshot.png)
 
 ## Installation
 
