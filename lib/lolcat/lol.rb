@@ -30,10 +30,13 @@ module Lol
   end
 
   def self.cat(fd, opts={})
+    print "\e[?25l" if opts[:animate]
     fd.each do |line|
       opts[:os] += 1
       println(line, opts)
     end
+    ensure
+    print "\e[?25h" if opts[:animate]
   end
 
   def self.println(str, defaults={}, opts={})
