@@ -19,43 +19,113 @@
 require "lolcat/version"
 require "lolcat/lol"
 
-require 'optparse'
+require 'stringio'
+require 'trollop'
 
 module Lol
-  def self.cat!
-    if ['-h','--help','--halp','--version'].include? ARGV[0] 
-      begin
-        puts
-        Lol.whut "Usage: lolcat [[file] [[file] [[file] [[file] [file]]]] [...]]", 20
-        puts
-        Lol.whut "Concatenate FILE(s), or standard input, to standard output.", 19
-        Lol.whut "With no FILE, or when FILE is -, read standard input.", 18
-        puts
-        Lol.whut "  -h, --help, --halp, --version   display this help and exit", 17
-    
-        puts
-        Lol.whut "Examples:"
-        Lol.whut "  lolcat f - g      Output f's contents, then standard input, then g's contents.", 16
-        Lol.whut "  lolcat            Copy standard input to standard output.", 15
-        Lol.whut "  fortune | lolcat  Display a rainbow cookie.", 14
-    
-        puts
-        Lol.whut "Report lolcat bugs to <http://www.github.org/busyloop/lolcat/issues>", 13
-        Lol.whut "lolcat home page: <http://www.github.org/busyloop/lolcat/>", 12
-        Lol.whut "Report lolcat translation bugs to <http://speaklolcat.com/>", 11
-        Lol.whut "For complete documentation, read the source!", 10
-        puts
-      rescue Interrupt
-      end
-      exit 1
-    end
-    
+  def self.halp!(text, opts={})
+    opts = { 
+      :animate => false,
+      :duration => 12,
+      :os => 0,
+      :speed => 20,
+      :spread => 8.0,
+      :freq => 0.3
+    }.merge opts
+
     begin
-      fds = ARGV.empty? ? [ARGF] : ARGV[0..-1]
-      fds.each do |file|
-        file = ARGF if file == '-'
-        file = File.open file unless file == ARGF
-        Lol.cat file,8 
+      i = 20
+      o = rand(256)
+      text.split("\n").each do |line|
+        i -= 1
+        opts[:os] = o+i
+        Lol.println line, opts
+      end
+      puts "\n"
+    rescue Interrupt
+    end
+    exit 1
+  end
+
+  def self.cat!
+    p = Trollop::Parser.new do
+      banner <<HEADER
+
+Usage: lolcat [OPTION]... [FILE]...
+
+Concatenate FILE(s), or standard input, to standard output.
+With no FILE, or when FILE is -, read standard input.
+
+HEADER
+      banner ''
+      opt :spread, "Rainbow spread", :short => 'p', :default => 8.0
+      opt :seed, "Rainbow seed, 0 = random", :short => 'S', :default => 0
+      opt :animate, "Enable psychedelics", :short => 'a', :default => false
+      opt :duration, "Animation duration", :short => 'd', :default => 12
+      opt :speed, "Animation speed", :short => 's', :default => 20.0
+      opt :force, "Force color even when stdout is not a tty", :short => 'f', :default => false
+      opt :version,  "Print version and exit", :short => 'v'
+      opt :help,  "Show this message", :short => 'h'
+      banner <<FOOTER
+
+Examples:
+  lolcat f - g      Output f's contents, then standard input, then g's contents.
+  lolcat            Copy standard input to standard output.
+  fortune | lolcat  Display a rainbow cookie.
+
+Report lolcat bugs to <http://www.github.org/busyloop/lolcat/issues>
+lolcat home page: <http://www.github.org/busyloop/lolcat/>
+Report lolcat translation bugs to <http://speaklolcat.com/>
+For complete documentation, read the source!
+
+FOOTER
+    end
+
+    opts = Trollop::with_standard_exception_handling p do
+      begin
+        o = p.parse ARGV
+      rescue Trollop::HelpNeeded
+        buf = StringIO.new
+        p.educate buf
+        buf.rewind
+        halp! buf.read, {}
+        buf.close
+      end
+      o
+    end
+
+    p.die :spread, "must be > 0" if opts[:spread] < 0.1
+    p.die :duration, "must be > 0" if opts[:duration] < 0.1
+    p.die :speed, "must be > 0.1" if opts[:duration] < 0.1
+
+    opts = { :freq => 0.3 }.merge(opts)
+    opts[:os] = opts[:seed]
+    opts[:os] = rand(256) if opts[:os] == 0
+
+    begin
+      files = ARGV.empty? ? [:stdin] : ARGV[0..-1]
+      files.each do |file|
+        fd = ARGF if file == '-' or file == :stdin
+        begin
+          fd = File.open file unless fd == ARGF
+
+          if $stdout.tty? or opts[:force]
+            Lol.cat fd, opts
+          else
+            until fd.eof? do
+              $stdout.write(fd.read(8192))
+            end
+          end
+        rescue Errno::ENOENT
+          puts "lolcat: #{file}: No such file or directory"
+          exit 1
+        rescue Errno::EACCES
+          puts "lolcat: #{file}: Permission denied"
+          exit 1
+        rescue Errno::EISDIR
+          puts "lolcat: #{file}: Is a directory"
+          exit 1
+        end
       end
     rescue Interrupt
     end

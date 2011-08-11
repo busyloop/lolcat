@@ -17,10 +17,11 @@
 #  0. You just DO WHAT THE FUCK YOU WANT TO.
 
 require "lolcat/version"
-
 require 'paint'
 
 module Lol
+  STRIP_ANSI = Regexp.compile '\e\[(\d+)(;\d+)?(;\d+)?[m|K]', nil
+
   def self.rainbow(freq, i)
      red   = Math.sin(freq*i + 0) * 127 + 128
      green = Math.sin(freq*i + 2*Math::PI/3) * 127 + 128
@@ -28,28 +29,37 @@ module Lol
      "#%02X%02X%02X" % [ red, green, blue ]
   end
 
-  def self.whut(text, duration=12, delay=0.05, spread=8)
-    (1..duration).each do |i|
-      print "\e[#{text.length}D"
-      text.chars.each_with_index do |c,j|
-        print Paint[c, rainbow(0.3, i+j/spread)]
-      end
-      sleep delay
+  def self.cat(fd, opts={})
+    fd.each do |line|
+      opts[:os] += 1
+      println(line, opts)
     end
+  end
+
+  def self.println(str, defaults={}, opts={})
+    opts.merge!(defaults)
+    str.chomp!
+    str.gsub! STRIP_ANSI, '' if !str.nil? and ($stdout.tty? or opts[:force])
+    opts[:animate] ? println_ani(str, opts) : println_plain(str, opts)
     puts
   end
 
-  def self.lput(str, offset, spread)
-    print Paint[str, rainbow(0.3, offset/spread)]
+  private
+
+  def self.println_plain(str, defaults={}, opts={})
+    opts.merge!(defaults)
+    str.chomp.chars.each_with_index do |c,i|
+      print Paint[c, rainbow(opts[:freq], opts[:os]+i/opts[:spread])]
+    end
   end
 
-  def self.cat(fd, spread)
-    i=0
-    fd.each do |line|
-      line.chars.each_with_index do |c,j|
-        lput c, i+j, spread
-      end
-      i+=1
+  def self.println_ani(str, opts={})
+    return if str.empty?
+    (1..opts[:duration]).each do |i|
+      print "\e[#{str.length}D"
+      opts[:os] += opts[:spread]/Math::PI
+      println_plain(str, opts)
+      sleep 1.0/opts[:speed]
     end
   end
 end
