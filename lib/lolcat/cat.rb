@@ -71,7 +71,7 @@ HEADER
       banner <<FOOTER
 
 Examples:
-  lolcat f - g      Output f's contents, then standard input, then g's contents.
+  lolcat f - g      Output f's contents, then stdin, then g's contents.
   lolcat            Copy standard input to standard output.
   fortune | lolcat  Display a rainbow cookie.
 
@@ -97,7 +97,7 @@ FOOTER
 
     p.die :spread, "must be > 0" if opts[:spread] < 0.1
     p.die :duration, "must be > 0" if opts[:duration] < 0.1
-    p.die :speed, "must be > 0.1" if opts[:duration] < 0.1
+    p.die :speed, "must be > 0.1" if opts[:speed] < 0.1
 
     opts[:os] = opts[:seed]
     opts[:os] = rand(256) if opts[:os] == 0
