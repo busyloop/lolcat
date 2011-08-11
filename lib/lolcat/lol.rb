@@ -18,6 +18,9 @@
 
 require "lolcat/version"
 require 'paint'
+require 'unicode'
+
+$KCODE = 'UTF-8'
 
 module Lol
   STRIP_ANSI = Regexp.compile '\e\[(\d+)(;\d+)?(;\d+)?[m|K]', nil
