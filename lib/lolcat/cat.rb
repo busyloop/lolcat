@@ -49,6 +49,7 @@ module Lol
 
   def self.cat!
     p = Trollop::Parser.new do
+      version "lolcat #{Lolcat::VERSION} (c)2011 moe@busyloop.net"
       banner <<HEADER
 
 Usage: lolcat [OPTION]... [FILE]...
@@ -58,7 +59,8 @@ With no FILE, or when FILE is -, read standard input.
 
 HEADER
       banner ''
-      opt :spread, "Rainbow spread", :short => 'p', :default => 8.0
+      opt :spread, "Rainbow spread", :short => 'p', :default => 3.0
+      opt :freq, "Rainbow frequency", :short => 'F', :default => 0.1
       opt :seed, "Rainbow seed, 0 = random", :short => 'S', :default => 0
       opt :animate, "Enable psychedelics", :short => 'a', :default => false
       opt :duration, "Animation duration", :short => 'd', :default => 12
@@ -76,7 +78,6 @@ Examples:
 Report lolcat bugs to <http://www.github.org/busyloop/lolcat/issues>
 lolcat home page: <http://www.github.org/busyloop/lolcat/>
 Report lolcat translation bugs to <http://speaklolcat.com/>
-For complete documentation, read the source!
 
 FOOTER
     end
@@ -98,7 +99,6 @@ FOOTER
     p.die :duration, "must be > 0" if opts[:duration] < 0.1
     p.die :speed, "must be > 0.1" if opts[:duration] < 0.1
 
-    opts = { :freq => 0.3 }.merge(opts)
     opts[:os] = opts[:seed]
     opts[:os] = rand(256) if opts[:os] == 0
 
@@ -124,6 +124,8 @@ FOOTER
           exit 1
         rescue Errno::EISDIR
           puts "lolcat: #{file}: Is a directory"
+          exit 1
+        rescue Errno::EPIPE
           exit 1
         end
       end

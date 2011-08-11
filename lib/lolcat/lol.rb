@@ -60,7 +60,7 @@ module Lol
     return if str.empty?
     (1..opts[:duration]).each do |i|
       print "\e[#{str.length}D"
-      opts[:os] += opts[:spread]/Math::PI
+      opts[:os] += opts[:spread]
       println_plain(str, opts)
       sleep 1.0/opts[:speed]
     end
