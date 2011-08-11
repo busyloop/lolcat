@@ -32,6 +32,7 @@ module Lol
       :spread => 8.0,
       :freq => 0.3
     }.merge opts
+    opts[:white] = true if ARGV.index('--u-wat-wut-what-whut-bgrond') != nil
 
     begin
       i = 20
@@ -68,6 +69,7 @@ HEADER
       opt :force, "Force color even when stdout is not a tty", :short => 'f', :default => false
       opt :version,  "Print version and exit", :short => 'v'
       opt :help,  "Show this message", :short => 'h'
+      opt :u_wat_wut_what_whut_bgrond, "For white background terminal", :short => 'u', :default => false
       banner <<FOOTER
 
 Examples:
@@ -82,6 +84,7 @@ Report lolcat translation bugs to <http://speaklolcat.com/>
 FOOTER
     end
 
+    mean_lolcat = true if ARGV.index('-u') != nil
     opts = Trollop::with_standard_exception_handling p do
       begin
         o = p.parse ARGV
@@ -98,6 +101,8 @@ FOOTER
     p.die :spread, "must be > 0" if opts[:spread] < 0.1
     p.die :duration, "must be > 0" if opts[:duration] < 0.1
     p.die :speed, "must be > 0.1" if opts[:duration] < 0.1
+
+    opts[:white] = mean_lolcat ? false : opts[:u_wat_wut_what_whut_bgrond]
 
     opts[:os] = opts[:seed]
     opts[:os] = rand(256) if opts[:os] == 0
