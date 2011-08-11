@@ -1,3 +1,3 @@
 module Lolcat
-  VERSION = "42.0.42"
+  VERSION = "42.0.43"
 end
