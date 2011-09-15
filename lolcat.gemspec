@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.version     = Lolcat::VERSION
   s.authors     = ["Moe"]
   s.email       = ["moe@busyloop.net"]
-  s.homepage    = "https://github.com/ehrenmurdick/lolcat"
+  s.homepage    = "https://github.com/busyloop/lolcat"
   s.description = %q{Rainbows and unicorns!}
   s.summary     = %q{Okay, no unicorns. But rainbows!!}
 
