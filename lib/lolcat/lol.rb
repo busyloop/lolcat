@@ -29,6 +29,21 @@ module Lol
      "#%02X%02X%02X" % [ red, green, blue ]
   end
 
+  def self.rc_opts
+    return @rc_opts if @rc_opts
+    rc_path = File.join(ENV["HOME"], ".lolcatrc")
+    if File.exist?(rc_path)
+      require 'yaml'
+      @rc_opts = YAML.load(File.read(rc_path))
+      @rc_opts.each_key do |k|
+        @rc_opts[k.to_sym] = @rc_opts.delete(k)
+      end
+    else
+      @rc_opts = {}
+    end
+    @rc_opts
+  end
+
   def self.cat(fd, opts={})
     print "\e[?25l" if opts[:animate]
     fd.each do |line|
@@ -41,6 +56,7 @@ module Lol
 
   def self.println(str, defaults={}, opts={})
     opts.merge!(defaults)
+    opts.merge!(rc_opts)
     str.chomp!
     str.gsub! STRIP_ANSI, '' if !str.nil? and ($stdout.tty? or opts[:force])
     opts[:animate] ? println_ani(str, opts) : println_plain(str, opts)
@@ -51,6 +67,7 @@ module Lol
 
   def self.println_plain(str, defaults={}, opts={})
     opts.merge!(defaults)
+    opts.merge!(rc_opts)
     str.chomp.chars.each_with_index do |c,i|
       print Paint[c, rainbow(opts[:freq], opts[:os]+i/opts[:spread])]
     end
