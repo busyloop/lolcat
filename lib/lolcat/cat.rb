@@ -75,8 +75,8 @@ Examples:
   lolcat            Copy standard input to standard output.
   fortune | lolcat  Display a rainbow cookie.
 
-Report lolcat bugs to <http://www.github.org/busyloop/lolcat/issues>
-lolcat home page: <http://www.github.org/busyloop/lolcat/>
+Report lolcat bugs to <https://github.com/busyloop/lolcat/issues>
+lolcat home page: <https://github.com/busyloop/lolcat/>
 Report lolcat translation bugs to <http://speaklolcat.com/>
 
 FOOTER
