@@ -19,6 +19,11 @@
 require "lolcat/version"
 require 'paint'
 
+if (RUBY_VERSION.split('.').map{|s| s.to_i} <=> [1, 9]) == -1 then
+  require 'unicode'
+  $KCODE = 'UTF-8'
+end
+
 module Lol
   STRIP_ANSI = Regexp.compile '\e\[(\d+)(;\d+)?(;\d+)?[m|K]', nil
 

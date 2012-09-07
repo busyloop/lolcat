@@ -14,6 +14,9 @@ Gem::Specification.new do |s|
   #s.rubyforge_project = "lolcat"
   s.add_dependency "paint", "~> 0.8.3"
   s.add_dependency "trollop", "~> 1.16.2"
+  if (RUBY_VERSION.split('.').map{|v| v.to_i} <=> [1, 9]) == -1 then
+    s.add_dependency "unicode", ">= 0"
+  end
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
