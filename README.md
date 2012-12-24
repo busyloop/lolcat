@@ -10,3 +10,10 @@
 
 `gem install lolcat`
 
+## Configuration
+
+Create a $HOME/.lolcatrc to set defaults (yaml). For example
+
+    spread: 1
+    freq: 10
+    force: true
