@@ -8,5 +8,6 @@
 
 ## Installation
 
-`gem install lolcat`
-
+```bash
+$ gem install lolcat
+```
