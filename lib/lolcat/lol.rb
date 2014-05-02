@@ -22,10 +22,17 @@ require 'paint'
 module Lol
   STRIP_ANSI = Regexp.compile '\e\[(\d+)(;\d+)?(;\d+)?[m|K]', nil
 
-  def self.rainbow(freq, i)
+  def self.rainbow(opts, i)
+     freq  = opts[:freq]
+     i     = opts[:os] + i/opts[:spread]
      red   = Math.sin(freq*i + 0) * 127 + 128
      green = Math.sin(freq*i + 2*Math::PI/3) * 127 + 128
      blue  = Math.sin(freq*i + 4*Math::PI/3) * 127 + 128
+     if opts[:white]
+       red   /= 1.5
+       green /= 1.5
+       blue  /= 1.5
+     end
      "#%02X%02X%02X" % [ red, green, blue ]
   end
 
@@ -53,7 +60,7 @@ module Lol
   def self.println_plain(str, defaults={}, opts={})
     opts.merge!(defaults)
     str.chomp.chars.each_with_index do |c,i|
-      print Paint[c, rainbow(opts[:freq], opts[:os]+i/opts[:spread])]
+      print Paint[c, rainbow(opts, i)]
     end
   end
 
