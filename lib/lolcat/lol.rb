@@ -20,7 +20,7 @@ require "lolcat/version"
 require 'paint'
 
 module Lol
-  STRIP_ANSI = Regexp.compile '\e\[(\d+)(;\d+)?(;\d+)?[m|K]', nil
+  STRIP_ANSI = Regexp.compile '\e\[[\d;]*[m|K]', nil
 
   def self.rainbow(freq, i)
      red   = Math.sin(freq*i + 0) * 127 + 128
