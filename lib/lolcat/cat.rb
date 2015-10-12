@@ -30,7 +30,8 @@ module Lol
       :os => 0,
       :speed => 20,
       :spread => 8.0,
-      :freq => 0.3
+      :freq => 0.3,
+      :newline => true
     }.merge opts
 
     begin
@@ -66,8 +67,10 @@ HEADER
       opt :duration, "Animation duration", :short => 'd', :default => 12
       opt :speed, "Animation speed", :short => 's', :default => 20.0
       opt :force, "Force color even when stdout is not a tty", :short => 'f', :default => false
+      opt :newline, "Don't print a trailing newline with this option", :short => 'n', :default => true
       opt :version,  "Print version and exit", :short => 'v'
       opt :help,  "Show this message", :short => 'h'
+
       banner <<FOOTER
 
 Examples:
@@ -89,7 +92,7 @@ FOOTER
         buf = StringIO.new
         p.educate buf
         buf.rewind
-        halp! buf.read, {}
+        halp! buf.read, {:newline => true}
         buf.close
       end
       o
