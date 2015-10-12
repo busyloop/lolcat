@@ -2,17 +2,17 @@
 # lolcat (c)2011 moe@busyloop.net
 #
 
-#            DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE 
-#                    Version 2, December 2004 
+#            DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
+#                    Version 2, December 2004
 #
-# Copyright (C) 2004 Sam Hocevar <sam@hocevar.net> 
+# Copyright (C) 2004 Sam Hocevar <sam@hocevar.net>
 #
-# Everyone is permitted to copy and distribute verbatim or modified 
-# copies of this license document, and changing it is allowed as long 
-# as the name is changed. 
+# Everyone is permitted to copy and distribute verbatim or modified
+# copies of this license document, and changing it is allowed as long
+# as the name is changed.
 #
-#            DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE 
-#   TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION 
+#            DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
+#   TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
 #
 #  0. You just DO WHAT THE FUCK YOU WANT TO.
 
@@ -23,30 +23,6 @@ require 'stringio'
 require 'trollop'
 
 module Lol
-  def self.halp!(text, opts={})
-    opts = { 
-      :animate => false,
-      :duration => 12,
-      :os => 0,
-      :speed => 20,
-      :spread => 8.0,
-      :freq => 0.3
-    }.merge opts
-
-    begin
-      i = 20
-      o = rand(256)
-      text.split("\n").each do |line|
-        i -= 1
-        opts[:os] = o+i
-        Lol.println line, opts
-      end
-      puts "\n"
-    rescue Interrupt
-    end
-    exit 1
-  end
-
   def self.cat!
     p = Trollop::Parser.new do
       version "lolcat #{Lolcat::VERSION} (c)2011 moe@busyloop.net"
@@ -89,8 +65,18 @@ FOOTER
         buf = StringIO.new
         p.educate buf
         buf.rewind
-        halp! buf.read, {}
+        opts = {
+          :animate => false,
+          :duration => 12,
+          :os => rand(256),
+          :speed => 20,
+          :spread => 8.0,
+          :freq => 0.3
+        }
+        Lol.cat buf.read.split("\n"), opts
+        puts
         buf.close
+        exit 1
       end
       o
     end
