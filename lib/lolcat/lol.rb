@@ -53,7 +53,9 @@ module Lol
   def self.println_plain(str, defaults={}, opts={})
     opts.merge!(defaults)
     str.chomp.chars.each_with_index do |c,i|
-      print Paint[c, rainbow(opts[:freq], opts[:os]+i/opts[:spread])]
+      args = [c, rainbow(opts[:freq], opts[:os]+i/opts[:spread])]
+      args.push :blink if opts[:blink]
+      print Paint[*args]
     end
   end
 

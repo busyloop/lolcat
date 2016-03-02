@@ -42,6 +42,7 @@ HEADER
       opt :duration, "Animation duration", :short => 'd', :default => 12
       opt :speed, "Animation speed", :short => 's', :default => 20.0
       opt :force, "Force color even when stdout is not a tty", :short => 'f', :default => false
+      opt :blink, "Blink", :short => 'b', :default => false
       opt :version,  "Print version and exit", :short => 'v'
       opt :help,  "Show this message", :short => 'h'
       banner <<FOOTER
