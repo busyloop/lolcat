@@ -11,3 +11,9 @@
 ```bash
 $ gem install lolcat
 ```
+
+### Example Implementation
+
+```bash
+alias hextrip='cat /dev/urandom | hexdump -e "`echo $COLUMNS*1.0/3.0 | bc`/1 \"%02x \" \"\n\"" | lolcat -F 0.01'
+```
