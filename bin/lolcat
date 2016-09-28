@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
 #
 # lolcat (c)2011 moe@busyloop.net
@@ -18,8 +19,8 @@
 #
 #  0. You just DO WHAT THE FUCK YOU WANT TO.
 
-require "rubygems"
-require "lolcat/version"
-require "lolcat/cat"
+require 'rubygems'
+require 'lolcat/version'
+require 'lolcat/cat'
 
 Lol.cat!

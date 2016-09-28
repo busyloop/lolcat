@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 #
 # lolcat (c)2011 moe@busyloop.net
 #
@@ -16,8 +17,8 @@
 #
 #  0. You just DO WHAT THE FUCK YOU WANT TO.
 
-require "lolcat/version"
-require "lolcat/lol"
+require 'lolcat/version'
+require 'lolcat/lol'
 
 require 'stringio'
 require 'trollop'
@@ -35,15 +36,15 @@ With no FILE, or when FILE is -, read standard input.
 
 HEADER
       banner ''
-      opt :spread, "Rainbow spread", :short => 'p', :default => 3.0
-      opt :freq, "Rainbow frequency", :short => 'F', :default => 0.1
-      opt :seed, "Rainbow seed, 0 = random", :short => 'S', :default => 0
-      opt :animate, "Enable psychedelics", :short => 'a', :default => false
-      opt :duration, "Animation duration", :short => 'd', :default => 12
-      opt :speed, "Animation speed", :short => 's', :default => 20.0
-      opt :force, "Force color even when stdout is not a tty", :short => 'f', :default => false
-      opt :version,  "Print version and exit", :short => 'v'
-      opt :help,  "Show this message", :short => 'h'
+      opt :spread, 'Rainbow spread', short: 'p', default: 3.0
+      opt :freq, 'Rainbow frequency', short: 'F', default: 0.1
+      opt :seed, 'Rainbow seed, 0 = random', short: 'S', default: 0
+      opt :animate, 'Enable psychedelics', short: 'a', default: false
+      opt :duration, 'Animation duration', short: 'd', default: 12
+      opt :speed, 'Animation speed', short: 's', default: 20.0
+      opt :force, 'Force color even when stdout is not a tty', short: 'f', default: false
+      opt :version, 'Print version and exit', short: 'v'
+      opt :help, 'Show this message', short: 'h'
       banner <<FOOTER
 
 Examples:
@@ -58,7 +59,7 @@ Report lolcat translation bugs to <http://speaklolcat.com/>
 FOOTER
     end
 
-    opts = Trollop::with_standard_exception_handling p do
+    opts = Trollop.with_standard_exception_handling p do
       begin
         o = p.parse ARGV
       rescue Trollop::HelpNeeded
@@ -66,12 +67,12 @@ FOOTER
         p.educate buf
         buf.rewind
         opts = {
-          :animate => false,
-          :duration => 12,
-          :os => rand(256),
-          :speed => 20,
-          :spread => 8.0,
-          :freq => 0.3
+          animate: false,
+          duration: 12,
+          os: rand(256),
+          speed: 20,
+          spread: 8.0,
+          freq: 0.3
         }
         Lol.cat buf.read.split("\n"), opts
         puts
@@ -81,9 +82,9 @@ FOOTER
       o
     end
 
-    p.die :spread, "must be >= 0.1" if opts[:spread] < 0.1
-    p.die :duration, "must be >= 0.1" if opts[:duration] < 0.1
-    p.die :speed, "must be >= 0.1" if opts[:speed] < 0.1
+    p.die :spread, 'must be >= 0.1' if opts[:spread] < 0.1
+    p.die :duration, 'must be >= 0.1' if opts[:duration] < 0.1
+    p.die :speed, 'must be >= 0.1' if opts[:speed] < 0.1
 
     opts[:os] = opts[:seed]
     opts[:os] = rand(256) if opts[:os] == 0
@@ -91,16 +92,14 @@ FOOTER
     begin
       files = ARGV.empty? ? [:stdin] : ARGV[0..-1]
       files.each do |file|
-        fd = ARGF if file == '-' or file == :stdin
+        fd = ARGF if file == '-' || file == :stdin
         begin
           fd = File.open file unless fd == ARGF
 
-          if $stdout.tty? or opts[:force]
+          if $stdout.tty? || opts[:force]
             Lol.cat fd, opts
           else
-            until fd.eof? do
-              $stdout.write(fd.read(8192))
-            end
+            $stdout.write(fd.read(8192)) until fd.eof?
           end
         rescue Errno::ENOENT
           puts "lolcat: #{file}: No such file or directory"
@@ -119,4 +118,3 @@ FOOTER
     end
   end
 end
-
