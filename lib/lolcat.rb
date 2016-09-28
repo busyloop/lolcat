@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 #
 # lolcat (c)2011 moe@busyloop.net
 #
@@ -16,6 +17,6 @@
 #
 #  0. You just DO WHAT THE FUCK YOU WANT TO.
 
-require "lolcat/version"
-require "lolcat/lol"
-require "lolcat/cat"
+require 'lolcat/version'
+require 'lolcat/lol'
+require 'lolcat/cat'

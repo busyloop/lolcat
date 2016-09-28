@@ -1,0 +1,43 @@
+AllCops:
+  TargetRubyVersion: 2.3
+  Exclude:
+    - 'spec/fixtures/**/*'
+
+Style/IndentationWidth:
+  Width: 2
+
+Style/Documentation:
+  Enabled: false
+
+Style/Encoding:
+  Enabled: false
+
+Style/MultilineOperationIndentation:
+  EnforcedStyle: indented
+
+Style/FirstParameterIndentation:
+  EnforcedStyle: special_for_inner_method_call_in_parentheses
+
+Metrics/AbcSize:
+  Max: 25
+
+Metrics/LineLength:
+  Max: 120
+
+Metrics/MethodLength:
+  Max: 40
+
+Metrics/ClassLength:
+  Max: 250
+
+Metrics/ModuleLength:
+  Max: 250
+
+Metrics/CyclomaticComplexity:
+  Max: 8
+
+Metrics/PerceivedComplexity:
+  Max: 8
+
+Rails:
+  Enabled: true
