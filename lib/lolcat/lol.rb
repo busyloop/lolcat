@@ -58,9 +58,22 @@ module Lol
   private
 
   def self.println_plain(str, defaults={}, opts={})
+    esc = false
     opts.merge!(defaults)
     str.chomp.chars.each_with_index do |c,i|
-      print Paint[c, rainbow(opts[:freq], opts[:os]+i/opts[:spread])]
+      if esc
+        if c == "H" or c == "G" or c == "P" or c =="K" or c == "h" or c == "l" or c == "r" or c == "m" or c == "J" or c =="d"
+          esc = false
+        end
+        print c
+      elsif c == "\e"
+        esc = true
+        print c
+      elsif c == "\r" or c == "\b"
+        print c
+      else
+        print Paint[c, rainbow(opts[:freq], opts[:os]+i/opts[:spread])]
+      end
     end
   end
 
