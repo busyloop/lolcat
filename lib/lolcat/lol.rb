@@ -60,7 +60,10 @@ module Lol
   def self.println_plain(str, defaults={}, opts={})
     opts.merge!(defaults)
     str.chomp.chars.each_with_index do |c,i|
-      print Paint[c, rainbow(opts[:freq], opts[:os]+i/opts[:spread])]
+      code = rainbow(opts[:freq], opts[:os]+i/opts[:spread])
+      tc   = (opts[:truecolor] ? '=' : '')
+      print Paint[c, *[ (:black if opts[:invert]),
+                        "#{tc}#{code}" ].compact ]
     end
   end
 
