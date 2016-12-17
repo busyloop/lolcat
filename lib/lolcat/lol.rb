@@ -28,6 +28,7 @@ require 'paint'
 
 module Lol
   STRIP_ANSI = Regexp.compile '\e\[[\d;]*[m|K]', nil
+  @paint_detected_mode = Paint.detect_mode
 
   def self.rainbow(freq, i)
      red   = Math.sin(freq*i + 0) * 127 + 128
@@ -59,11 +60,10 @@ module Lol
 
   def self.println_plain(str, defaults={}, opts={})
     opts.merge!(defaults)
+    set_mode(opts[:truecolor])
     str.chomp.chars.each_with_index do |c,i|
       code = rainbow(opts[:freq], opts[:os]+i/opts[:spread])
-      tc   = (opts[:truecolor] ? '=' : '')
-      print Paint[c, *[ (:black if opts[:invert]),
-                        "#{tc}#{code}" ].compact ]
+      print Paint[c, *[ (:black if opts[:invert]), code ].compact ]
     end
   end
 
@@ -75,5 +75,10 @@ module Lol
       println_plain(str, opts)
       sleep 1.0/opts[:speed]
     end
+  end
+
+  def self.set_mode(truecolor)
+    @paint_mode_detected ||= Paint.mode
+    Paint.mode = truecolor ? 0xffffff : @paint_mode_detected
   end
 end
