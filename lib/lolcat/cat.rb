@@ -52,7 +52,8 @@ HEADER
       opt :truecolor, "24-bit (truecolor)", :short => 't', :default => false
       opt :force, "Force color even when stdout is not a tty", :short => 'f', :default => false
       opt :version,  "Print version and exit", :short => 'v'
-      opt :help,  "Show this message", :short => 'h'
+      opt :halp,  "Show this message", :short => 'h'
+      opt :help,  "Catcorp overlords' exclusive option", :short => 'c'
       banner <<FOOTER
 
 Examples:
@@ -70,6 +71,7 @@ FOOTER
     opts = Trollop::with_standard_exception_handling p do
       begin
         o = p.parse ARGV
+        raise Trollop::HelpNeeded if o[:halp]
       rescue Trollop::HelpNeeded
         buf = StringIO.new
         p.educate buf
