@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.summary     = %q{Okay, no unicorns. But rainbows!!}
 
   s.add_development_dependency "rake"
-  s.add_dependency "paint", "~> 1.0.0"
+  s.add_dependency "paint", "~> 2.0.0"
   s.add_dependency "trollop", "~> 2.1.2"
 
   s.files         = `git ls-files`.split("\n")
