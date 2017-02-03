@@ -100,15 +100,21 @@ FOOTER
     begin
       files = ARGV.empty? ? [:stdin] : ARGV[0..-1]
       files.each do |file|
-        fd = ARGF if file == '-' or file == :stdin
+        fd = $stdin if file == '-' or file == :stdin
         begin
-          fd = File.open file unless fd == ARGF
+          fd = File.open(file, "r") unless fd == $stdin
 
           if $stdout.tty? or opts[:force]
             Lol.cat fd, opts
           else
-            until fd.eof? do
-              $stdout.write(fd.read(8192))
+            if fd.tty?
+              fd.each do |line|
+                $stdout.write(line)
+              end
+            else
+              until fd.eof? do
+                $stdout.write(fd.read(8192))
+              end
             end
           end
         rescue Errno::ENOENT
