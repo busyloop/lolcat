@@ -1,0 +1,100 @@
+.TH LOLCAT 6 "June 11, 2017"
+.\" Please adjust this date whenever revising the manpage.
+.SH NAME
+lolcat \- rainbow coloring effect for text console display
+
+.SH SYNOPSIS
+.B lolcat
+.RI [ options ] " " [ files ] " " ...
+
+.SH DESCRIPTION
+This manual page documents briefly the
+.B lolcat
+command.
+.PP
+\fBlolcat\fP is a program that concatenates files, or standard input, to
+standard output (like the generic \fBcat\fP), and adds rainbow coloring to it.
+
+.SH OPTIONS
+
+.TP
+\fB\-p\fP \fIX\fP, \fB\-\-spread=\fIX\fP
+Inclination of the rainbow stripes
+.br
+(character widths per line hight; high values (>1000) give almost horizonal stripes, low values (0.1) almost vertical ones; default: 3.0).
+.TP
+\fB\-F\fP \fIX\fP, \fB\-\-freq=\fIX\fP
+Frequency of the rainbow effect.
+.br
+(low values around 0.0001 give almost monochromous screens; default: 0.1).
+.TP
+\fB\-S\fP \fIX\fP, \fB\-\-seed=\fIX\fP
+Initial value for the random number generator; 0 means automatic.
+.br
+(default: 0).
+.TP
+\fB\-a\fP, \fB\-\-animate\fP
+Fade every line through an animation before printing the next one.
+.TP
+\fB\-d\fP \fIX\fP, \fB\-\-duration=\fIX\fP
+Duration of the animation.
+.br
+(number of steps before showing next line; default: 12)
+.TP
+\fB\-s\fP \fIX\fP, \fB\-\-speed=\fIX\fP
+Speed of the animation.
+.br
+(frame rate, ie. number of steps per second; default: 20)
+.TP
+\fB\-i\fP, \fB\-\-invert\fP
+Inverts the background and foreground colors.
+.TP
+\fB\-t\fP, \fB\-\-truecolor\fP
+Enables 24-bit truecolor mode.
+.TP
+\fB\-f\fP, \fB\-\-force\fP
+Force color even when stdout is not a tty.
+.TP
+.B \-v, \-\-version
+Shows lolcat version.
+.TP
+.B \-h, \-\-help
+Shows options summary.
+
+.SH EXAMPLES
+
+Typical combinations of \fBlolcat\fP include other programs that generate text:
+.br
+.br
+Large colorful words can be written like this:
+
+.IP
+.EX
+echo "KTHXBAI" | toilet | lolcat
+.EE
+.
+.P
+
+Cows are popular, come in all colors, and tell random epigrams:
+
+.IP
+.EX
+fortune | cowsay | lolcat \-a
+.EE
+.
+.P
+
+.SH SEE ALSO
+.BR cat (1),
+.BR toilet (1),
+.BR fortune (6),
+.BR cowsay (6)
+.br
+.SH AUTHOR
+lolcat was written by Moe <moe@busyloop.net>.
+.PP
+This manual page was originally written by chrysn <chrysn@fsfe.org>,
+for the Debian project.
+.br
+Very quickly revamped by Mathieu Aubin <mathieu@zeroserieux.com> to
+include as part of official code repository.
