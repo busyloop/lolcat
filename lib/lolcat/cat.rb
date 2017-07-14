@@ -82,7 +82,7 @@ FOOTER
           :spread => 8.0,
           :freq => 0.3
         }
-        Lol.cat buf.read.split("\n"), opts
+        Lol.cat buf.read.split(/(?<=\n)/), opts
         puts
         buf.close
         exit 1

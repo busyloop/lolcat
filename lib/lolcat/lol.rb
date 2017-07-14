@@ -49,11 +49,11 @@ module Lol
 
   def self.println(str, defaults={}, opts={})
     opts.merge!(defaults)
-    str.chomp!
+    chomped = str.chomp!
     str.gsub! STRIP_ANSI, '' if !str.nil? and ($stdout.tty? or opts[:force])
     str.gsub! "\t", "        "
     opts[:animate] ? println_ani(str, opts) : println_plain(str, opts)
-    puts
+    puts if chomped
   end
 
   private
