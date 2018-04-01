@@ -27,7 +27,6 @@ require "lolcat/version"
 require 'paint'
 
 module Lol
-  STRIP_ANSI = Regexp.compile '\e\[[\d;]*[m|K]', nil
   @paint_detected_mode = Paint.detect_mode
 
   def self.rainbow(freq, i)
@@ -39,18 +38,28 @@ module Lol
 
   def self.cat(fd, opts={})
     print "\e[?25l" if opts[:animate]
-    fd.each do |line|
-      opts[:os] += 1
-      println(line, opts)
+    while true do
+      begin
+        buf = fd.sysread(65536)
+      rescue EOFError
+        break
+      end
+      buf.force_encoding(fd.external_encoding)
+      buf.lines.each do |line|
+        opts[:os] += 1
+        println(line, opts)
+      end
     end
     ensure
-    print "\e[?25h" if opts[:animate]
+    if STDOUT.tty? then
+        print "\e[m\e[?25h\e[?1;5;47;2004l"
+        system("stty cooked -nl <&1");
+    end
   end
 
   def self.println(str, defaults={}, opts={})
     opts.merge!(defaults)
-    chomped = str.chomp!
-    str.gsub! STRIP_ANSI, '' if !str.nil? and ($stdout.tty? or opts[:force])
+    chomped = str.sub!(/\n$/, "")
     str.gsub! "\t", "        "
     opts[:animate] ? println_ani(str, opts) : println_plain(str, opts)
     puts if chomped
@@ -61,18 +70,20 @@ module Lol
   def self.println_plain(str, defaults={}, opts={})
     opts.merge!(defaults)
     set_mode(opts[:truecolor])
-    str.chomp.chars.each_with_index do |c,i|
+    str.scan(/((?:\e(?:[ -\/]+.|[\]PX^_][^\a\e]*|\[[0-?]*.|.))*)(.?)/m).each_with_index do |c,i|
       code = rainbow(opts[:freq], opts[:os]+i/opts[:spread])
-      print Paint[c, *[ (:black if opts[:invert]), code ].compact ]
+      print c[0], Paint[c[1], *[ (:black if opts[:invert]), code ].compact ]
     end
   end
 
   def self.println_ani(str, opts={})
     return if str.empty?
+    print "\e7"
     (1..opts[:duration]).each do |i|
-      print "\e[#{str.length}D"
+      print "\e8"
       opts[:os] += opts[:spread]
       println_plain(str, opts)
+      str.gsub!(/\e\[[0-?]*[@JKPX]/, "")
       sleep 1.0/opts[:speed]
     end
   end

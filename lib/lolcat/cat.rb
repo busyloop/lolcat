@@ -82,7 +82,7 @@ FOOTER
           :spread => 8.0,
           :freq => 0.3
         }
-        Lol.cat buf.read.split(/(?<=\n)/), opts
+        Lol.cat buf, opts
         puts
         buf.close
         exit 1
@@ -112,9 +112,7 @@ FOOTER
                 $stdout.write(line)
               end
             else
-              until fd.eof? do
-                $stdout.write(fd.read(8192))
-              end
+              IO.copy_stream(fd, $stdout)
             end
           end
         rescue Errno::ENOENT
