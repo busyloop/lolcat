@@ -27,6 +27,10 @@ require "lolcat/version"
 require 'paint'
 
 module Lol
+  ANSI_ESCAPE = /((?:\e(?:[ -\/]+.|[\]PX^_][^\a\e]*|\[[0-?]*.|.))*)(.?)/m
+  INCOMPLETE_ESCAPE = /\e(?:[ -\/]*|[\]PX^_][^\a\e]*|\[[0-?]*)$/
+  INCOMPLETE_UTF8 = /[\xc0-\xdf]$|[\xe0-\xef].?$|[\xf0-\xf7].?.?$/n
+
   @paint_detected_mode = Paint.detect_mode
 
   def self.rainbow(freq, i)
@@ -39,8 +43,11 @@ module Lol
   def self.cat(fd, opts={})
     print "\e[?25l" if opts[:animate]
     while true do
+      buf = ''
       begin
-        buf = fd.sysread(65536)
+        begin
+          buf += fd.sysread(4096)
+        end while buf.match(INCOMPLETE_ESCAPE) or (fd.external_encoding == 'UTF-8' and buf.match(INCOMPLETE_UTF8))
       rescue EOFError
         break
       end
@@ -52,8 +59,8 @@ module Lol
     end
     ensure
     if STDOUT.tty? then
-        print "\e[m\e[?25h\e[?1;5;47;2004l"
-        system("stty cooked -nl <&1");
+        print "\e[m\e[?25h\e[?1;5;2004l"
+        system("stty sane -istrip <&1");
     end
   end
 
@@ -70,9 +77,13 @@ module Lol
   def self.println_plain(str, defaults={}, opts={})
     opts.merge!(defaults)
     set_mode(opts[:truecolor])
-    str.scan(/((?:\e(?:[ -\/]+.|[\]PX^_][^\a\e]*|\[[0-?]*.|.))*)(.?)/m).each_with_index do |c,i|
-      code = rainbow(opts[:freq], opts[:os]+i/opts[:spread])
-      print c[0], Paint[c[1], *[ (:black if opts[:invert]), code ].compact ]
+    str.scan(ANSI_ESCAPE).each_with_index do |c,i|
+      color = rainbow(opts[:freq], opts[:os]+i/opts[:spread])
+      if opts[:invert] then
+        print c[0], Paint.color(nil, color), c[1], "\e[49m"
+      else
+        print c[0], Paint.color(color), c[1], "\e[39m"
+      end
     end
   end
 
