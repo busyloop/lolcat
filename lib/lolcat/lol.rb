@@ -29,7 +29,6 @@ require 'paint'
 module Lol
   ANSI_ESCAPE = /((?:\e(?:[ -\/]+.|[\]PX^_][^\a\e]*|\[[0-?]*.|.))*)(.?)/m
   INCOMPLETE_ESCAPE = /\e(?:[ -\/]*|[\]PX^_][^\a\e]*|\[[0-?]*)$/
-  INCOMPLETE_UTF8 = /[\xc0-\xdf]$|[\xe0-\xef].?$|[\xf0-\xf7].?.?$/n
 
   @paint_detected_mode = Paint.detect_mode
 
@@ -47,7 +46,8 @@ module Lol
       begin
         begin
           buf += fd.sysread(4096)
-        end while buf.match(INCOMPLETE_ESCAPE) or (fd.external_encoding == 'UTF-8' and buf.match(INCOMPLETE_UTF8))
+          invalid_encoding = !buf.dup.force_encoding(fd.external_encoding).valid_encoding?
+        end while invalid_encoding or buf.match(INCOMPLETE_ESCAPE)
       rescue EOFError
         break
       end
