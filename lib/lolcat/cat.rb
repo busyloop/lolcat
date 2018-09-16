@@ -27,11 +27,11 @@ require "lolcat/version"
 require "lolcat/lol"
 
 require 'stringio'
-require 'trollop'
+require 'optimist'
 
 module Lol
   def self.cat!
-    p = Trollop::Parser.new do
+    p = Optimist::Parser.new do
       version "lolcat #{Lolcat::VERSION} (c)2011 moe@busyloop.net"
       banner <<HEADER
 
@@ -67,10 +67,10 @@ Report lolcat translation bugs to <http://speaklolcat.com/>
 FOOTER
     end
 
-    opts = Trollop::with_standard_exception_handling p do
+    opts = Optimist::with_standard_exception_handling p do
       begin
         o = p.parse ARGV
-      rescue Trollop::HelpNeeded
+      rescue Optimist::HelpNeeded
         buf = StringIO.new
         p.educate buf
         buf.rewind
