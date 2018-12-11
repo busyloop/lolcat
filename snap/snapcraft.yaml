@@ -20,7 +20,6 @@ parts:
 
 apps:
   lolcat:
-    command: lolcat
     environment:
       RUBYLIB: $SNAP/usr/lib/ruby/2.5.0:$SNAP/usr/lib/x86_64-linux-gnu/ruby/2.5.0
       GEM_HOME: $SNAP/gems
