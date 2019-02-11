@@ -60,7 +60,7 @@ module Lol
     ensure
     if STDOUT.tty? then
         print "\e[m\e[?25h\e[?1;5;2004l"
-        system("stty sane -istrip <&1");
+        # system("stty sane -istrip <&1");
     end
   end
 
