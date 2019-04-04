@@ -50,6 +50,7 @@ HEADER
       opt :speed, "Animation speed", :short => 's', :default => 20.0
       opt :invert, "Invert fg and bg", :short => 'i', :default => false
       opt :truecolor, "24-bit (truecolor)", :short => 't', :default => false
+      opt :number, "Show line numbers", :short => 'n', :default => false
       opt :force, "Force color even when stdout is not a tty", :short => 'f', :default => false
       opt :version,  "Print version and exit", :short => 'v'
       opt :help,  "Show this message", :short => 'h'
