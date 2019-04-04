@@ -52,8 +52,9 @@ module Lol
         break
       end
       buf.force_encoding(fd.external_encoding)
-      buf.lines.each do |line|
+      buf.lines.each_with_index do |line, i|
         opts[:os] += 1
+        line = format('%6d  %s', i + 1, line) if opts[:number]
         println(line, opts)
       end
     end
