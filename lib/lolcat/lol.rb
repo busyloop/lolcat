@@ -31,6 +31,7 @@ module Lol
   INCOMPLETE_ESCAPE = /\e(?:[ -\/]*|[\]PX^_][^\a\e]*|\[[0-?]*)$/
 
   @paint_detected_mode = Paint.detect_mode
+  @os = 0
 
   def self.rainbow(freq, i)
      red   = Math.sin(freq*i + 0) * 127 + 128
@@ -52,9 +53,8 @@ module Lol
         break
       end
       buf.force_encoding(fd.external_encoding)
-      buf.lines.each_with_index do |line, i|
-        opts[:os] += 1
-        line = format('%6d  %s', i + 1, line) if opts[:number]
+      buf.lines.each do |line|
+        @os += 1
         println(line, opts)
       end
     end
@@ -69,35 +69,46 @@ module Lol
     opts.merge!(defaults)
     chomped = str.sub!(/\n$/, "")
     str.gsub! "\t", "        "
-    opts[:animate] ? println_ani(str, opts) : println_plain(str, opts)
+    opts[:animate] ? println_ani(str, opts, chomped) : println_plain(str, opts, chomped)
     puts if chomped
   end
 
   private
 
-  def self.println_plain(str, defaults={}, opts={})
+  def self.println_plain(str, defaults={}, opts={}, chomped)
     opts.merge!(defaults)
     set_mode(opts[:truecolor])
-    str.scan(ANSI_ESCAPE).each_with_index do |c,i|
-      color = rainbow(opts[:freq], opts[:os]+i/opts[:spread])
+    filtered = str.scan(ANSI_ESCAPE)
+    filtered.each_with_index do |c, i|
+      color = rainbow(opts[:freq], @os+i/opts[:spread])
       if opts[:invert] then
         print c[0], Paint.color(nil, color), c[1], "\e[49m"
       else
         print c[0], Paint.color(color), c[1], "\e[39m"
       end
     end
+
+    if chomped == nil
+      @old_os = @os
+      @os = @os + filtered.length/opts[:spread]
+    elsif @old_os
+      @os = @old_os
+      @old_os = nil
+    end
   end
 
-  def self.println_ani(str, opts={})
+  def self.println_ani(str, opts={}, chomped)
     return if str.empty?
     print "\e7"
+    @real_os = @os
     (1..opts[:duration]).each do |i|
       print "\e8"
-      opts[:os] += opts[:spread]
-      println_plain(str, opts)
+      @os += opts[:spread]
+      println_plain(str, opts, chomped)
       str.gsub!(/\e\[[0-?]*[@JKPX]/, "")
       sleep 1.0/opts[:speed]
     end
+    @os = @real_os
   end
 
   def self.set_mode(truecolor)
