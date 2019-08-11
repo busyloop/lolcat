@@ -77,7 +77,7 @@ FOOTER
         opts = {
           :animate => false,
           :duration => 12,
-          :os => rand(256),
+          :os => rand * 8192,
           :speed => 20,
           :spread => 8.0,
           :freq => 0.3

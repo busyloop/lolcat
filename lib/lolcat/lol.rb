@@ -41,6 +41,7 @@ module Lol
   end
 
   def self.cat(fd, opts={})
+    @os = opts[:os]
     print "\e[?25l" if opts[:animate]
     while true do
       buf = ''
