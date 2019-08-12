@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.summary     = %q{Okay, no unicorns. But rainbows!!}
 
   s.add_development_dependency "rake"
-  s.add_dependency "paint", "~> 2.0.0"
+  s.add_dependency "paint", "~> 2.1.0"
   s.add_dependency "optimist", "~> 3.0.0"
   s.add_dependency "manpages", "~> 0.6.1"
 

@@ -30,8 +30,8 @@ module Lol
   ANSI_ESCAPE = /((?:\e(?:[ -\/]+.|[\]PX^_][^\a\e]*|\[[0-?]*.|.))*)(.?)/m
   INCOMPLETE_ESCAPE = /\e(?:[ -\/]*|[\]PX^_][^\a\e]*|\[[0-?]*)$/
 
-  @paint_detected_mode = Paint.detect_mode
   @os = 0
+  @paint_init = false
 
   def self.rainbow(freq, i)
      red   = Math.sin(freq*i + 0) * 127 + 128
@@ -78,7 +78,7 @@ module Lol
 
   def self.println_plain(str, defaults={}, opts={}, chomped)
     opts.merge!(defaults)
-    set_mode(opts[:truecolor])
+    set_mode(opts[:truecolor]) unless @paint_init
     filtered = str.scan(ANSI_ESCAPE)
     filtered.each_with_index do |c, i|
       color = rainbow(opts[:freq], @os+i/opts[:spread])
@@ -113,7 +113,10 @@ module Lol
   end
 
   def self.set_mode(truecolor)
-    @paint_mode_detected ||= Paint.mode
+    # @paint_mode_detected = Paint.mode
+    @paint_mode_detected = %w[truecolor 24bit].include?(ENV['COLORTERM']) ? 0xffffff : 256
     Paint.mode = truecolor ? 0xffffff : @paint_mode_detected
+    STDERR.puts "DEBUG: Paint.mode = #{Paint.mode} (detected: #{@paint_mode_detected})" if ENV['LOLCAT_DEBUG']
+    @paint_init = true
   end
 end
