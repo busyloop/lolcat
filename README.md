@@ -11,3 +11,9 @@
 ```bash
 $ gem install lolcat
 ```
+
+Or using [homebrew](https://brew.sh):
+
+```bash
+$ brew install lolcat
+```
