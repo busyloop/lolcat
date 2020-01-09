@@ -17,3 +17,8 @@ Or using [homebrew](https://brew.sh):
 ```bash
 $ brew install lolcat
 ```
+Or using APT
+
+```bash
+$ apt install lolcat
+```
