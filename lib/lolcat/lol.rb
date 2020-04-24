@@ -84,6 +84,8 @@ module Lol
       color = rainbow(opts[:freq], @os+i/opts[:spread])
       if opts[:invert] then
         print c[0], Paint.color(nil, color), c[1], "\e[49m"
+      elsif opts[:clearsky] then
+        print c[0], c[1]
       else
         print c[0], Paint.color(color), c[1], "\e[39m"
       end
