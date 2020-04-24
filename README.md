@@ -8,12 +8,15 @@
 
 ## Installation
 
+### Linux
+
 ```bash
-$ gem install lolcat
+$ sudo snap install lolcat
 ```
 
-Or using [homebrew](https://brew.sh):
+### Mac
 
 ```bash
 $ brew install lolcat
 ```
+
