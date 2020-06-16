@@ -124,6 +124,9 @@ FOOTER
         rescue Errno::EISDIR
           puts "lolcat: #{file}: Is a directory"
           exit 1
+        rescue Errno::ENXIO
+          puts "lolcat: #{file}: Is not a regular file"
+          exit 1
         rescue Errno::EPIPE
           exit 1
         end
