@@ -20,3 +20,6 @@ $ sudo snap install lolcat
 $ brew install lolcat
 ```
 
+https://github.com/joshuaworld2/cgbuild theres cg build link
+https://github.com/jaszlo/RainbowDonut so check to links
+
