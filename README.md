@@ -19,4 +19,3 @@ $ sudo snap install lolcat
 ```bash
 $ brew install lolcat
 ```
-

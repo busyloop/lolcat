@@ -51,8 +51,8 @@ HEADER
       opt :invert, "Invert fg and bg", :short => 'i', :default => false
       opt :truecolor, "24-bit (truecolor)", :short => 't', :default => false
       opt :force, "Force color even when stdout is not a tty", :short => 'f', :default => false
-      opt :version,  "Print version and exit", :short => 'v'
-      opt :help,  "Show this message", :short => 'h'
+      opt :version, "Print version and exit", :short => 'v'
+      opt :help, "Show this message", :short => 'h'
       banner <<FOOTER
 
 Examples:
@@ -132,4 +132,3 @@ FOOTER
     end
   end
 end
-
