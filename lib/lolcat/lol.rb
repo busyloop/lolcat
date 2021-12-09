@@ -34,9 +34,9 @@ module Lol
   @paint_init = false
 
   def self.rainbow(freq, i)
-     red   = Math.sin(freq*i + 0) * 127 + 128
-     green = Math.sin(freq*i + 2*Math::PI/3) * 127 + 128
-     blue  = Math.sin(freq*i + 4*Math::PI/3) * 127 + 128
+     red   = ((Math.sin(freq*i + 0)            + 1) * 127.5).round
+     green = ((Math.sin(freq*i + 2*Math::PI/3) + 1) * 127.5).round
+     blue  = ((Math.sin(freq*i + 4*Math::PI/3) + 1) * 127.5).round
      "#%02X%02X%02X" % [ red, green, blue ]
   end
 
