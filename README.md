@@ -19,3 +19,9 @@ $ sudo snap install lolcat
 ```bash
 $ brew install lolcat
 ```
+
+### Termux
+```bash
+$ pkg install ruby
+$ gem install lolcat
+```
